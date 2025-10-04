@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vedhaa R - Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --secondary: #ec4899;
+      --accent: #8b5cf6;
+      --dark: #1e1b4b;
+      --light: #f1f5f9;
+      --text: #334155;
+      --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+      --gradient-light: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(236, 72, 153, 0.1) 100%);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--light);
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Animated Background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .bg-animation::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: moveBackground 20s linear infinite;
+    }
+
+    @keyframes moveBackground {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* Header with Glassmorphism */
+    header {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    header .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after,
+    .nav-links a.active::after {
+      width: 100%;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Hero Section with 3D Effect */
+    .hero {
+      background: var(--gradient);
+      color: white;
+      padding: 180px 20px 100px;
+      text-align: center;
+      margin-top: 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: rotateBackground 30s linear infinite;
+    }
+
+    @keyframes rotateBackground {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-content h2 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      animation: fadeInUp 1s ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-content span {
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-content span::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: white;
+      animation: underline 2s ease infinite;
+    }
+
+    @keyframes underline {
+      0%, 100% { width: 0; }
+      50% { width: 100%; }
+    }
+
+    .hero-content p {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      animation: fadeInUp 1s ease 0.2s both;
+    }
+
+    .hero-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.9;
+      margin-top: 10px;
+      animation: fadeInUp 1s ease 0.4s both;
+    }
+
+    .contact-info {
+      margin-top: 25px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      font-size: 1rem;
+      animation: fadeInUp 1s ease 0.6s both;
+    }
+
+    .contact-info a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 20px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: all 0.3s;
+    }
+
+    .contact-info a:hover {
+      background: rgba(255,255,255,0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn {
+      display: inline-block;
+      background: white;
+      color: var(--primary);
+      padding: 14px 35px;
+      margin-top: 25px;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: bold;
+      transition: all 0.3s;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      animation: fadeInUp 1s ease 0.8s both;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+
+    /* Section Styles with Cards */
+    .section {
+      padding: 100px 20px;
+      background: white;
+      margin: 40px 0;
+      border-radius: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient);
+    }
+
+    .section h2 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-bottom: 1rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    .section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      margin-bottom: 3rem;
+      font-size: 1.1rem;
+    }
+
+    .about-content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      font-size: 1.2rem;
+      line-height: 2;
+      padding: 30px;
+      background: var(--gradient-light);
+      border-radius: 20px;
+      border-left: 4px solid var(--primary);
+    }
+
+    /* Skills with Progress Animation */
+    .skills-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 25px;
+      list-style: none;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .skills-list li {
+      background: var(--gradient);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 15px;
+      font-weight: bold;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skills-list li::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2), transparent);
+      transition: all 0.5s;
+      transform: scale(0);
+    }
+
+    .skills-list li:hover::before {
+      transform: scale(1);
+    }
+
+    .skills-list li:hover {
+      transform: translateY(-5px) scale(1.05);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Project Cards with Hover Effects */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 35px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .project-card {
+      background: white;
+      padding: 35px;
+      border-radius: 20px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 2px solid transparent;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-light);
+      transition: left 0.5s;
+      z-index: 0;
+    }
+
+    .project-card:hover::before {
+      left: 0;
+    }
+
+    .project-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+    }
+
+    .project-card h3 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .project-card p {
+      position: relative;
+      z-index: 1;
+      line-height: 1.8;
+    }
+
+    /* Education & Experience Timeline */
+    .education-section,
+    .participations-section,
+    .internships-section,
+    .personal-details-section,
+    .certifications-section {
+      padding: 100px 20px;
+      background: white;
+      margin: 40px 0;
+      border-radius: 30px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .education-section::before,
+    .participations-section::before,
+    .internships-section::before,
+    .personal-details-section::before,
+    .certifications-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: var(--gradient);
+    }
+
+    .education-section h2,
+    .participations-section h2,
+    .internships-section h2,
+    .personal-details-section h2,
+    .certifications-section h2 {
+      text-align: center;
+      font-size: 2.8rem;
+      margin-bottom: 3rem;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+    }
+
+    .education-section h2::after,
+    .participations-section h2::after,
+    .internships-section h2::after,
+    .personal-details-section h2::after,
+    .certifications-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+
+    .education-item,
+    .participation-item,
+    .internship-item {
+      background: var(--gradient-light);
+      padding: 30px;
+      margin-bottom: 25px;
+      border-radius: 15px;
+      border-left: 5px solid var(--primary);
+      max-width: 950px;
+      margin-left: auto;
+      margin-right: auto;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .education-item:hover,
+    .participation-item:hover,
+    .internship-item:hover {
+      transform: translateX(10px);
+      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.15);
+    }
+
+    .education-item h3,
+    .participation-item h3,
+    .internship-item h3 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      font-size: 1.4rem;
+    }
+
+    .institution,
+    .company {
+      font-weight: bold;
+      color: var(--text);
+      font-size: 1.05rem;
+    }
+
+    .dates {
+      font-style: italic;
+      color: #888;
+      margin: 5px 0;
+    }
+
+    .grade {
+      font-weight: bold;
+      color: var(--secondary);
+      font-size: 1.1rem;
+    }
+
+    .participation-item ul {
+      margin-left: 20px;
+      margin-top: 15px;
+    }
+
+    .participation-item li {
+      margin: 10px 0;
+      line-height: 1.8;
+    }
+
+    .description {
+      margin-top: 10px;
+      color: #666;
+      line-height: 1.8;
+    }
+
+    /* Personal Details Grid */
+    .details-grid {
+      max-width: 850px;
+      margin: 0 auto;
+      background: var(--gradient-light);
+      padding: 40px;
+      border-radius: 20px;
+      border: 2px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .detail-item {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      padding: 18px 0;
+      border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+      transition: all 0.3s;
+    }
+
+    .detail-item:hover {
+      padding-left: 10px;
+      background: rgba(255,255,255,0.5);
+    }
+
+    .detail-item:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      font-weight: bold;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .detail-value {
+      color: var(--text);
+    }
+
+    .detail-value a {
+      color: var(--primary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .detail-value a:hover {
+      color: var(--secondary);
+      text-decoration: underline;
+    }
+
+    /* Certificate Section */
+    .certificates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .certificate-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      transition: all 0.4s;
+      position: relative;
+      border: 2px solid transparent;
+    }
+
+    .certificate-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+    }
+
+    .certificate-preview {
+      width: 100%;
+      height: 200px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .certificate-preview canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .certificate-info {
+      padding: 20px;
+    }
+
+    .certificate-name {
+      font-weight: bold;
+      color: var(--text);
+      margin-bottom: 5px;
+      font-size: 1rem;
+      word-wrap: break-word;
+    }
+
+    .certificate-date {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 15px;
+    }
+
+    .certificate-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .action-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      font-size: 0.9rem;
+      background: var(--gradient);
+      color: white;
+    }
+
+    .action-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+      grid-column: 1 / -1;
+    }
+
+    .empty-state svg {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+      opacity: 0.3;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.95);
+      backdrop-filter: blur(5px);
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      position: relative;
+      margin: 2% auto;
+      width: 90%;
+      height: 90%;
+      max-width: 1200px;
+    }
+
+    .modal-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .certificates-modal-content {
+      position: relative;
+      margin: 2% auto;
+      padding: 40px 20px;
+      width: 95%;
+      max-width: 1400px;
+      background: white;
+      border-radius: 20px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .modal-header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: sticky;
+      top: 0;
+      background: white;
+      padding: 20px 0;
+      z-index: 10;
+      border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .modal-header h2 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+    }
+
+    .close-modal,
+    .close-certificates-modal {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      color: white;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      z-index: 2001;
+    }
+
+    .close-certificates-modal {
+      top: 15px;
+      right: 15px;
+      color: var(--text);
+    }
+
+    .close-modal:hover,
+    .close-certificates-modal:hover {
+      color: var(--secondary);
+      transform: rotate(90deg);
+    }
+
+    /* Contact Form */
+    form {
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    form input,
+    form textarea {
+      width: 100%;
+      padding: 16px;
+      margin-bottom: 20px;
+      border: 2px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s;
+      background: var(--gradient-light);
+    }
+
+    form input:focus,
+    form textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+      transform: translateY(-2px);
+    }
+
+    form textarea {
+      min-height: 160px;
+      resize: vertical;
+    }
+
+    footer {
+      background: var(--dark);
+      color: white;
+      text-align: center;
+      padding: 30px 20px;
+      margin-top: 40px;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-weight: bold;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .nav-links {
+        gap: 1rem;
+        justify-content: center;
+      }
+
+      .hero-content h2 {
+        font-size: 2.2rem;
+      }
+
+      .contact-info {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .detail-item {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+
+      .certificates-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section h2 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Scroll Animation */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInView 0.8s ease forwards;
+    }
+
+    @keyframes fadeInView {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"></div>
+
+  <header>
+    <div class="container">
+      <h1 class="logo">Vedhaa R</h1>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#education">Education</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#internships">Internships</a></li>
+          <li><a href="#certifications">Certifications</a></li>
+          <li><a href="#personal-details">Personal Details</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h2>Hello, I'm <span>Vedhaa R</span></h2>
+      <p>Aspiring Software Developer with a Passion for Innovation</p>
+      <p>Full Stack Web Developer | UI/UX Enthusiast</p>
+      <p class="hero-subtitle">Highly motivated and academically strong with keen interest in web development, design, and problem-solving</p>
+      <div class="contact-info">
+        <a href="mailto:vedhaasrk@gmail.com">📧 vedhaasrk@gmail.com</a>
+        <a href="https://linkedin.com/in/vedhaa171" target="_blank">💼 LinkedIn</a>
+        <a href="tel:8825617526">📱 8825617526</a>
+      </div>
+      <a href="#projects" class="btn">View My Work</a>
+    </div>
+  </section>
+
+  <section id="about" class="section fade-in">
+    <div class="container">
+      <h2>Career Objective</h2>
+      <div class="about-content">
+        <p>I am currently pursuing my BE in Computer Science and Engineering at SRM TRP Engineering College, Trichy (Anna University Affiliated). Seeking to begin my career in a dynamic organization where I can apply my technical and analytical skills, enhance my knowledge, and contribute to impactful real-world projects while evolving into a well-rounded professional.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="education" class="education-section fade-in">
+    <h2>Education</h2>
+    <div class="education-item">
+        <h3>Bachelor of Engineering in Computer Science and Engineering (BE CSE)</h3>
+        <p class="institution">SRM TRP Engineering College, Trichy (Anna University Affiliated)</p>
+        <p class="dates">November 2022 - May 2026</p>
+        <p class="grade">CGPA: 8.06</p>
+    </div>
+    <div class="education-item">
+        <h3>12th Standard</h3>
+        <p class="institution">Victory Higher Secondary School, Vedaranyam (Tamil Nadu State Board)</p>
+        <p class="dates">June 2021 - May 2022</p>
+        <p class="grade">Percentage: 85%</p>
+    </div>
+    <div class="education-item">
+        <h3>10th Standard</h3>
+        <p class="institution">Victory Higher Secondary School, Vedaranyam (Tamil Nadu State Board)</p>
+        <p class="dates">June 2019 - May 2020</p>
+        <p class="grade">Percentage: 91%</p>
+    </div>
+  </section>
+
+  <section id="skills" class="section fade-in">
+    <div class="container">
+      <h2>Technical Skills</h2>
+      <ul class="skills-list">
+        <li>Python</li>
+        <li>Java</li>
+        <li>HTML5</li>
+        <li>CSS3</li>
+        <li>JavaScript</li>
+        <li>React</li>
+        <li>MySQL</li>
+        <li>AI & Data</li>
+        <li>Figma</li>
+        <li>Canva</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="projects" class="section fade-in">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="projects-grid">
+        <div class="project-card">
+          <h3>🎨 Portfolio Builder</h3>
+          <p>A dynamic and responsive portfolio website built with modern frontend technologies including HTML, CSS, and Tailwind CSS. Features smooth animations and user-friendly interface.</p>
+        </div>
+        <div class="project-card">
+          <h3>🤖 Adaptive Theme Changing Technology in Chatbot</h3>
+          <p>Developed an intelligent theme adaptation system for chatbot interfaces that automatically adjusts based on user preferences and environmental conditions.</p>
+        </div>
+        <div class="project-card">
+          <h3>📝 Notes Builder Website</h3>
+          <p>Created a comprehensive note-taking web application with features for organizing, searching, and managing notes efficiently with a clean, intuitive interface.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="internships" class="internships-section fade-in">
+    <h2>Internship Experience</h2>
+    <div class="internship-item">
+        <h3>Full Stack Development Intern</h3>
+        <p class="company">VDart, Trichy</p>
+        <p class="description">Worked as Full Stack Developer Intern contributing to the development of a live Admin Test Page. Gained comprehensive experience in both frontend and backend technologies, database management, and deployment processes.</p>
+    </div>
+     <div class="internship-item">
+        <h3>Artificial Intelligence</h3>
+        <p class="company">Galwin Technology, Trichy</p>
+        <p class="description">Completed an internship at Galwin Technology focused on Artificial Intelligence, gaining hands-on experience in developing and implementing AI-based solutions.
+</p>
+    </div>
+    <div class="internship-item">
+        <h3>Web Development Intern</h3>
+        <p class="company">Codebinds Technologies, Trichy</p>
+        <p class="description">Contributed to a Business Management System project using frontend technologies like HTML and CSS. Gained hands-on experience in creating responsive and user-friendly web interfaces.</p>
+    </div>
+  </section>
+
+  <section id="certifications" class="certifications-section fade-in">
+    <h2>Certifications & Training</h2>
+    
+    <div style="max-width: 900px; margin: 0 auto;">
+      <div class="participation-item">
+        <h3>🎓 Workshops & Training Programs</h3>
+        <ul>
+          <li>IOT using Python and Raspberry Pi workshop at IIT Madras</li>
+          <li>AI for Students: Build Your Own Generative AI Model workshop by NxtWave and IIT Delhi alumnus Mr. Trivikrama</li>
+          <li>Artificial Intelligence workshop by Top Engineers, Chennai</li>
+          <li>Android Development workshop at Codebinds Technologies, Trichy</li>
+          <li>Placement Aptitude corporate training at Codebinds Technologies, Trichy</li>
+        </ul>
+      </div>
+      
+      <div class="participation-item">
+        <h3>🏆 Certifications & Courses</h3>
+        <ul>
+          <li>Generative AI online course via Google Cloud</li>
+          <li>LIDAR Data Processing and Applications online course</li>
+          <li>Salesforce Trailhead – Agentblazer Champion: Explored core AI concepts and built a basic agent for task automation</li>
+          <li>Awarded "Certificate of Distinction" in GREEN Olympiad for Youth by TERI</li>
+          <li>Completed MongoDB Basics for Students certification from MongoDB</li>
+        </ul>
+      </div>
+
+      <div class="participation-item">
+        <h3>🎨 Extracurricular Activities</h3>
+        <ul>
+          <li>Active member of the Designing Club at college and contributed to creative UI/UX works</li>
+        </ul>
+      </div>
+
+      <div class="participation-item" style="text-align: center; background: var(--gradient-light); border: 3px solid var(--primary);">
+        <h3>📁 My Certificate Collection</h3>
+        <p style="margin: 15px 0; color: #666;">View all my uploaded certificates</p>
+        <button onclick="openCertificatesModal()" class="btn" style="margin: 10px auto; cursor: pointer;">
+          👁️ View Certificates
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section id="personal-details" class="personal-details-section fade-in">
+    <h2>Personal Details</h2>
+    <div class="details-grid">
+        <div class="detail-item">
+            <span class="detail-label">Full Name:</span>
+            <span class="detail-value">Vedhaa R</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Email:</span>
+            <span class="detail-value">vedhaasrk@gmail.com</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Phone:</span>
+            <span class="detail-value">8825617526</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">LinkedIn:</span>
+            <span class="detail-value"><a href="https://linkedin.com/in/vedhaa171" target="_blank">linkedin.com/in/vedhaa171</a></span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Address:</span>
+            <span class="detail-value">4/84, Subramaniyankadu, Thagattur, Vedharanyam, Nagapattinam (dt), Tamil Nadu, 614714</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Date of Birth:</span>
+            <span class="detail-value">07 / 06 / 2005</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Gender:</span>
+            <span class="detail-value">Female</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Nationality:</span>
+            <span class="detail-value">Indian</span>
+        </div>
+        <div class="detail-item">
+            <span class="detail-label">Languages Known:</span>
+            <span class="detail-value">English, Tamil</span>
+        </div>
+    </div>
+  </section>
+
+  <section id="contact" class="section fade-in">
+    <div class="container">
+      <h2>Get In Touch</h2>
+      <p class="section-subtitle">Feel free to reach out for collaborations or just a friendly chat</p>
+      <form id="contactForm" action="https://formsubmit.co/vedhaasrk@gmail.com" method="POST">
+        <!-- FormSubmit Configuration -->
+        <input type="hidden" name="_subject" value="New Portfolio Contact Message!">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_template" value="table">
+        <input type="text" name="_honey" style="display:none">
+        
+        <!-- Form Fields -->
+        <input type="text" name="name" placeholder="Your Name" required />
+        <input type="email" name="email" placeholder="Your Email" required />
+        <textarea name="message" placeholder="Your Message" required></textarea>
+        <button type="submit" class="btn">Send Message</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Vedhaa R. All rights reserved.</p>
+  </footer>
+
+  <!-- Modal for PDF viewing -->
+  <div id="pdfModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <iframe id="pdfViewer"></iframe>
+    </div>
+  </div>
+
+  <!-- Modal for Certificates Collection -->
+  <div id="certificatesModal" class="modal">
+    <div class="certificates-modal-content">
+      <span class="close-certificates-modal">&times;</span>
+      <div class="modal-header">
+        <h2>📁 My Certificates</h2>
+      </div>
+      
+      <div id="certificatesContainer" class="certificates-grid">
+        <div class="loading">Loading certificates...</div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    // IndexedDB Setup for Persistent Storage
+    const DB_NAME = 'CertificatesDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'certificates';
+    let db;
+
+    // Initialize IndexedDB
+    function initDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          db = request.result;
+          resolve(db);
+        };
+
+        request.onupgradeneeded = (event) => {
+          db = event.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            const objectStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            objectStore.createIndex('uploadDate', 'uploadDate', { unique: false });
+          }
+        };
+      });
+    }
+
+    // Get all certificates from IndexedDB
+    function getAllCertificates() {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readonly');
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const request = objectStore.getAll();
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Initialize database and load certificates
+      try {
+        await initDB();
+        await loadCertificates();
+      } catch (error) {
+        console.error('Error initializing database:', error);
+        document.getElementById('certificatesContainer').innerHTML = `
+          <div class="empty-state">
+            <h3>Error loading certificates</h3>
+            <p>Please refresh the page and try again</p>
+          </div>
+        `;
+      }
+
+      // Smooth scrolling for navigation links
+      document.querySelectorAll('nav a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Active navigation
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('nav .nav-links a');
+
+      window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - document.querySelector('header').offsetHeight;
+          const sectionHeight = section.clientHeight;
+          if (pageYOffset >= sectionTop && pageYOffset < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+          }
+        });
+
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href').includes(current)) {
+            link.classList.add('active');
+          }
+        });
+      });
+
+      // Modal functionality
+      const modal = document.getElementById('pdfModal');
+      const closeModal = document.querySelector('.close-modal');
+      const certificatesModal = document.getElementById('certificatesModal');
+      const closeCertificatesModal = document.querySelector('.close-certificates-modal');
+
+      closeModal.onclick = function() {
+        modal.style.display = 'none';
+        document.getElementById('pdfViewer').src = '';
+      };
+
+      closeCertificatesModal.onclick = function() {
+        certificatesModal.style.display = 'none';
+      };
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+          document.getElementById('pdfViewer').src = '';
+        }
+        if (event.target == certificatesModal) {
+          certificatesModal.style.display = 'none';
+        }
+      };
+
+      // Contact form submission
+      document.getElementById('contactForm').addEventListener('submit', function(e) {
+        // FormSubmit will handle the submission
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+      });
+
+      // Scroll animations
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    });
+
+    async function loadCertificates() {
+      try {
+        const certificates = await getAllCertificates();
+        await renderCertificates(certificates);
+      } catch (error) {
+        console.error('Error loading certificates:', error);
+      }
+    }
+
+    async function renderCertificates(certificates) {
+      const container = document.getElementById('certificatesContainer');
+      
+      if (certificates.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <h3>No certificates uploaded yet</h3>
+            <p>Use the admin panel to upload certificates!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      for (const cert of certificates) {
+        const card = document.createElement('div');
+        card.className = 'certificate-card';
+        
+        card.innerHTML = `
+          <div class="certificate-preview">
+            <canvas id="preview-${cert.id}"></canvas>
+          </div>
+          <div class="certificate-info">
+            <div class="certificate-name">${cert.name}</div>
+            <div class="certificate-date">Uploaded: ${cert.uploadDate}</div>
+            <div class="certificate-actions">
+              <button class="action-btn" onclick="viewCertificate('${cert.id}')" title="Click to view full certificate">
+                👁️ View Full Certificate
+              </button>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(card);
+        
+        // Render preview with small delay for better performance
+        setTimeout(() => {
+          renderPDFPreview(cert.data, `preview-${cert.id}`);
+        }, 50 * certificates.indexOf(cert));
+      }
+    }
+
+    async function renderPDFPreview(dataUrl, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+
+      try {
+        const loadingTask = pdfjsLib.getDocument(dataUrl);
+        const pdf = await loadingTask.promise;
+        const page = await pdf.getPage(1);
+        
+        const viewport = page.getViewport({ scale: 1 });
+        const scale = canvas.parentElement.offsetWidth / viewport.width;
+        const scaledViewport = page.getViewport({ scale: scale });
+        
+        canvas.width = scaledViewport.width;
+        canvas.height = scaledViewport.height;
+        
+        const context = canvas.getContext('2d');
+        await page.render({
+          canvasContext: context,
+          viewport: scaledViewport
+        }).promise;
+      } catch (error) {
+        console.error('Error rendering PDF preview:', error);
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = 200;
+        ctx.fillStyle = '#6366f1';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.font = '60px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('📄', canvas.width/2, canvas.height/2);
+      }
+    }
+
+    async function viewCertificate(id) {
+      try {
+        console.log('Attempting to view certificate ID:', id);
+        
+        const certificates = await getAllCertificates();
+        console.log('Total certificates found:', certificates.length);
+        
+        const cert = certificates.find(c => String(c.id) === String(id));
+        
+        if (cert) {
+          console.log('Certificate found:', cert.name);
+          
+          const modal = document.getElementById('pdfModal');
+          const viewer = document.getElementById('pdfViewer');
+          
+          // Clear any existing content
+          viewer.src = '';
+          
+          // Show modal first
+          modal.style.display = 'block';
+          
+          // Small delay to ensure modal is visible before loading PDF
+          setTimeout(() => {
+            viewer.src = cert.data;
+            console.log('PDF loaded successfully');
+          }, 100);
+          
+        } else {
+          console.error('Certificate not found with ID:', id);
+          alert('❌ Certificate not found. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error viewing certificate:', error);
+        alert('❌ Error loading certificate. Please check the console for details.');
+      }
+    }
+
+    function openCertificatesModal() {
+      const certificatesModal = document.getElementById('certificatesModal');
+      certificatesModal.style.display = 'block';
+      loadCertificates();
+    }
+  </script>
+</body>
+</html>

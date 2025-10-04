@@ -1,0 +1,1480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Certificate Management</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #6366f1;
+      --secondary: #ec4899;
+      --accent: #8b5cf6;
+      --dark: #1e1b4b;
+      --light: #f1f5f9;
+      --text: #334155;
+      --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+      --gradient-light: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 50%, rgba(236, 72, 153, 0.1) 100%);
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 40% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+      z-index: -1;
+      animation: backgroundShift 15s ease-in-out infinite;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Login Container with Glassmorphism */
+    .login-container {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      padding: 50px 40px;
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 450px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      animation: slideIn 0.6s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .lock-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: var(--gradient);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .login-container h1 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+
+    .login-container p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 15px 20px;
+      border: 2px solid rgba(99, 102, 241, 0.2);
+      border-radius: 12px;
+      font-size: 1rem;
+      transition: all 0.3s;
+      background: var(--gradient-light);
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 15px;
+      background: var(--gradient);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    .error-message {
+      background: linear-gradient(135deg, #fee 0%, #fdd 100%);
+      color: #c33;
+      padding: 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      display: none;
+      border-left: 4px solid #c33;
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .password-hint {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #999;
+      margin-top: 20px;
+      padding: 15px;
+      background: var(--gradient-light);
+      border-radius: 10px;
+    }
+
+    .password-hint strong {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Admin Container with Sidebar */
+    .admin-container {
+      display: none;
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 1600px;
+      width: 100%;
+      max-height: 95vh;
+      overflow: hidden;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .admin-header {
+      background: var(--gradient);
+      color: white;
+      padding: 25px 35px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 25px 25px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .admin-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+      border-radius: 50%;
+    }
+
+    .admin-header h1 {
+      font-size: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logout-btn {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: 2px solid white;
+      padding: 10px 25px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .admin-content {
+      padding: 35px;
+      overflow-y: auto;
+      max-height: calc(95vh - 100px);
+    }
+
+    /* Stats Grid with Animations */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 35px;
+    }
+
+    .stat-card {
+      background: var(--gradient);
+      color: white;
+      padding: 30px;
+      border-radius: 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1), transparent);
+      animation: rotate 10s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px rgba(99, 102, 241, 0.3);
+    }
+
+    .stat-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card h3 {
+      font-size: 3rem;
+      margin-bottom: 5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .stat-card p {
+      opacity: 0.9;
+      font-size: 1.1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Upload Section with Drag & Drop Style */
+    .upload-section {
+      background: var(--gradient-light);
+      padding: 40px;
+      border-radius: 20px;
+      border: 3px dashed var(--primary);
+      margin-bottom: 35px;
+      text-align: center;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-section::before {
+      content: '📤';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 8rem;
+      opacity: 0.05;
+      z-index: 0;
+    }
+
+    .upload-section:hover {
+      border-color: var(--secondary);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
+      transform: scale(1.01);
+    }
+
+    .upload-section h2 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      font-size: 1.8rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .upload-section p {
+      color: #666;
+      margin-bottom: 20px;
+      font-size: 1.05rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .upload-btn-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      z-index: 1;
+    }
+
+    .upload-btn-wrapper input[type=file] {
+      position: absolute;
+      left: -9999px;
+    }
+
+    .upload-btn-wrapper label {
+      display: inline-block;
+      background: var(--gradient);
+      color: white;
+      padding: 15px 40px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      font-size: 1.1rem;
+    }
+
+    .upload-btn-wrapper label:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+    }
+
+    /* Certificates Section */
+    .certificates-section {
+      margin-top: 35px;
+    }
+
+    .certificates-section h2 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 25px;
+      font-size: 2rem;
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .certificates-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 80px;
+      height: 4px;
+      background: var(--gradient);
+      border-radius: 2px;
+    }
+
+    .certificates-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 35px;
+      margin-top: 30px;
+    }
+
+    .certificate-card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s;
+      border: 2px solid transparent;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .certificate-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--gradient);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+      z-index: 1;
+    }
+
+    .certificate-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .certificate-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(99, 102, 241, 0.2);
+      border-color: var(--primary);
+    }
+
+    .certificate-preview {
+      width: 100%;
+      height: 240px;
+      background: var(--gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .certificate-preview canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .certificate-info {
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+    }
+
+    .certificate-name {
+      font-weight: bold;
+      color: var(--text);
+      margin-bottom: 10px;
+      font-size: 1.05rem;
+      word-wrap: break-word;
+      line-height: 1.5;
+      min-height: 50px;
+    }
+
+    .certificate-date {
+      font-size: 0.9rem;
+      color: #888;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .certificate-date::before {
+      content: '📅';
+    }
+
+    .certificate-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: auto;
+    }
+
+    .action-btn {
+      padding: 14px 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .view-btn {
+      background: var(--gradient);
+      color: white;
+    }
+
+    .delete-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .action-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .action-btn:active {
+      transform: translateY(0);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: #999;
+      grid-column: 1 / -1;
+    }
+
+    .empty-state svg {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 25px;
+      opacity: 0.3;
+    }
+
+    .empty-state h3 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #666;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 3000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+    }
+
+    .modal-content {
+      position: relative;
+      margin: 2% auto;
+      width: 90%;
+      height: 90%;
+      max-width: 1200px;
+    }
+
+    .modal-content iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      color: white;
+      font-size: 45px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      backdrop-filter: blur(10px);
+    }
+
+    .close-modal:hover {
+      background: rgba(236, 72, 153, 0.8);
+      transform: rotate(90deg);
+    }
+
+    /* Success Message */
+    .success-message {
+      background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+      color: #155724;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      border-left: 5px solid #28a745;
+      display: none;
+      animation: slideDown 0.5s ease;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Loading Animation */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2rem;
+    }
+
+    .loading::after {
+      content: '...';
+      animation: dots 1.5s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0%, 20% { content: '.'; }
+      40% { content: '..'; }
+      60%, 100% { content: '...'; }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1400px) {
+      .certificates-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .certificates-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .admin-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .certificates-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .login-container {
+        padding: 40px 30px;
+      }
+
+      .admin-content {
+        padding: 25px 20px;
+      }
+
+      .upload-section {
+        padding: 30px 20px;
+      }
+
+      .certificate-actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .certificate-name {
+        font-size: 0.95rem;
+        min-height: auto;
+      }
+
+      .certificate-preview {
+        height: 200px;
+      }
+    }
+
+    /* Scrollbar Styling */
+    .admin-content::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    .admin-content::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    .admin-content::-webkit-scrollbar-thumb {
+      background: var(--gradient);
+      border-radius: 10px;
+    }
+
+    .admin-content::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #5558e3 0%, #7c4de8 50%, #e53d86 100%);
+    }
+
+    /* Custom Delete Confirmation Modal */
+    .delete-modal {
+      display: none;
+      position: fixed;
+      z-index: 4000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .delete-modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+
+    .delete-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      animation: shake 0.5s;
+    }
+
+    .delete-modal h3 {
+      text-align: center;
+      color: var(--text);
+      margin-bottom: 15px;
+      font-size: 1.5rem;
+    }
+
+    .delete-modal p {
+      text-align: center;
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .delete-modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .modal-btn {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+    }
+
+    .confirm-delete-btn {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: white;
+    }
+
+    .confirm-delete-btn:hover {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .cancel-delete-btn {
+      background: #e5e7eb;
+      color: var(--text);
+    }
+
+    .cancel-delete-btn:hover {
+      background: #d1d5db;
+      transform: translateY(-2px);
+    }
+
+    .deleting-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5000;
+    }
+
+    .deleting-spinner {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Login Form -->
+  <div class="login-container" id="loginContainer">
+    <div class="login-header">
+      <div class="lock-icon">🔐</div>
+      <h1>Admin Access</h1>
+      <p>Certificate Management System</p>
+    </div>
+    
+    <div class="error-message" id="errorMessage">
+      ❌ Invalid password. Please try again.
+    </div>
+
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="password">🔑 Password</label>
+        <input type="password" id="password" placeholder="Enter your admin password" required />
+      </div>
+      <button type="submit" class="btn">
+        <span style="position: relative; z-index: 1;">Login to Dashboard</span>
+      </button>
+    </form>
+
+
+  </div>
+
+  <!-- Admin Panel -->
+  <div class="admin-container" id="adminContainer">
+    <div class="admin-header">
+      <h1>📊 Certificate Management Dashboard</h1>
+      <div class="header-actions">
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+
+    <div class="admin-content">
+      <div class="success-message" id="successMessage">
+        ✅ Operation completed successfully!
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📄</div>
+          <h3 id="totalCerts">0</h3>
+          <p>Total Certificates</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💾</div>
+          <h3 id="storageUsed">0 KB</h3>
+          <p>Storage Used</p>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <h3 id="lastUpload">-</h3>
+          <p>Last Upload</p>
+        </div>
+      </div>
+
+      <div class="upload-section">
+        <h2>📤 Upload New Certificates</h2>
+        <p>Select one or multiple PDF files to upload to your portfolio</p>
+        <div class="upload-btn-wrapper">
+          <input type="file" id="certificateUpload" accept=".pdf" multiple />
+          <label for="certificateUpload">📁 Choose PDF Files</label>
+        </div>
+      </div>
+
+      <div class="certificates-section">
+        <h2>📋 All Certificates</h2>
+        <div id="certificatesContainer" class="certificates-grid">
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <h3>No certificates yet</h3>
+            <p>Upload your first certificate to get started!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for PDF viewing -->
+  <div id="pdfModal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal">&times;</span>
+      <iframe id="pdfViewer"></iframe>
+    </div>
+  </div>
+
+  <!-- Custom Delete Confirmation Modal -->
+  <div id="deleteModal" class="delete-modal">
+    <div class="delete-modal-content">
+      <div class="delete-icon">🗑️</div>
+      <h3>Delete Certificate?</h3>
+      <p>Are you sure you want to permanently delete this certificate? This action cannot be undone!</p>
+      <div class="delete-modal-actions">
+        <button class="modal-btn cancel-delete-btn" onclick="closeDeleteModal()">
+          Cancel
+        </button>
+        <button class="modal-btn confirm-delete-btn" id="confirmDeleteBtn">
+          Delete Forever
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deleting Overlay -->
+  <div id="deletingOverlay" class="deleting-overlay">
+    <div class="deleting-spinner">
+      <div class="spinner"></div>
+      <p style="color: var(--text); font-weight: bold;">Deleting certificate...</p>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    // Admin Password (Change this to your desired password)
+    const ADMIN_PASSWORD = 'admin123';
+    
+    // IndexedDB Setup
+    const DB_NAME = 'CertificatesDB';
+    const DB_VERSION = 1;
+    const STORE_NAME = 'certificates';
+    let db;
+
+    // Initialize IndexedDB
+    function initDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+          db = request.result;
+          resolve(db);
+        };
+
+        request.onupgradeneeded = (event) => {
+          db = event.target.result;
+          if (!db.objectStoreNames.contains(STORE_NAME)) {
+            const objectStore = db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+            objectStore.createIndex('uploadDate', 'uploadDate', { unique: false });
+          }
+        };
+      });
+    }
+
+    // Save certificate to IndexedDB
+    function saveCertificate(cert) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readwrite');
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const request = objectStore.add(cert);
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    // Get all certificates from IndexedDB
+    function getAllCertificates() {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([STORE_NAME], 'readonly');
+        const objectStore = transaction.objectStore(STORE_NAME);
+        const request = objectStore.getAll();
+
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    // Delete certificate from IndexedDB
+    function deleteCertificateFromDB(id) {
+      return new Promise((resolve, reject) => {
+        try {
+          const transaction = db.transaction([STORE_NAME], 'readwrite');
+          const objectStore = transaction.objectStore(STORE_NAME);
+          
+          // Convert id to number if it's a string
+          const certId = typeof id === 'string' ? parseFloat(id) : id;
+          
+          const request = objectStore.delete(certId);
+
+          request.onsuccess = () => {
+            console.log('Delete successful for ID:', certId);
+            resolve();
+          };
+          
+          request.onerror = (event) => {
+            console.error('Delete failed:', event.target.error);
+            reject(event.target.error);
+          };
+
+          transaction.oncomplete = () => {
+            console.log('Transaction completed');
+          };
+
+          transaction.onerror = (event) => {
+            console.error('Transaction error:', event.target.error);
+            reject(event.target.error);
+          };
+        } catch (error) {
+          console.error('Exception in deleteCertificateFromDB:', error);
+          reject(error);
+        }
+      });
+    }
+
+    // Login functionality
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const password = document.getElementById('password').value;
+      
+      if (password === ADMIN_PASSWORD) {
+        document.getElementById('loginContainer').style.display = 'none';
+        document.getElementById('adminContainer').style.display = 'block';
+        initAdmin();
+      } else {
+        const errorMsg = document.getElementById('errorMessage');
+        errorMsg.style.display = 'block';
+        setTimeout(() => {
+          errorMsg.style.display = 'none';
+        }, 3000);
+      }
+    });
+
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        document.getElementById('adminContainer').style.display = 'none';
+        document.getElementById('loginContainer').style.display = 'block';
+        document.getElementById('password').value = '';
+      }
+    }
+
+    async function initAdmin() {
+      try {
+        await initDB();
+        await loadCertificates();
+        updateStats();
+      } catch (error) {
+        console.error('Error initializing admin:', error);
+      }
+
+      // Upload functionality
+      document.getElementById('certificateUpload').addEventListener('change', handleFileUpload);
+
+      // Modal functionality
+      const modal = document.getElementById('pdfModal');
+      const closeModal = document.querySelector('.close-modal');
+
+      closeModal.onclick = function() {
+        modal.style.display = 'none';
+        document.getElementById('pdfViewer').src = '';
+      };
+
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = 'none';
+          document.getElementById('pdfViewer').src = '';
+        }
+      };
+    }
+
+    async function handleFileUpload(e) {
+      const files = Array.from(e.target.files);
+      let uploadCount = 0;
+      
+      for (const file of files) {
+        if (file.type === 'application/pdf') {
+          const reader = new FileReader();
+          
+          reader.onload = async function(event) {
+            const cert = {
+              id: Date.now() + Math.random(),
+              name: file.name,
+              data: event.target.result,
+              size: file.size,
+              uploadDate: new Date().toLocaleDateString()
+            };
+            
+            try {
+              await saveCertificate(cert);
+              uploadCount++;
+              
+              if (uploadCount === files.length) {
+                showSuccess(`${uploadCount} certificate(s) uploaded successfully!`);
+                await loadCertificates();
+                updateStats();
+              }
+            } catch (error) {
+              console.error('Error saving certificate:', error);
+              alert('Error saving certificate: ' + file.name);
+            }
+          };
+          
+          reader.readAsDataURL(file);
+        }
+      }
+      
+      e.target.value = '';
+    }
+
+    async function loadCertificates() {
+      try {
+        const certificates = await getAllCertificates();
+        await renderCertificates(certificates);
+      } catch (error) {
+        console.error('Error loading certificates:', error);
+      }
+    }
+
+    async function renderCertificates(certificates) {
+      const container = document.getElementById('certificatesContainer');
+      
+      if (certificates.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+            </svg>
+            <h3>No certificates yet</h3>
+            <p>Upload your first certificate to get started!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = '';
+      
+      for (const cert of certificates) {
+        const card = document.createElement('div');
+        card.className = 'certificate-card';
+        card.setAttribute('data-cert-id', cert.id);
+        
+        card.innerHTML = `
+          <div class="certificate-preview">
+            <canvas id="preview-${cert.id}"></canvas>
+          </div>
+          <div class="certificate-info">
+            <div class="certificate-name">${cert.name}</div>
+            <div class="certificate-date">${cert.uploadDate}</div>
+            <div class="certificate-actions">
+              <button class="action-btn view-btn" onclick="viewCertificate('${cert.id}')">
+                👁️ View
+              </button>
+              <button class="action-btn delete-btn" onclick="deleteCertificate('${cert.id}')">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(card);
+        
+        // Render preview after a small delay to ensure DOM is ready
+        setTimeout(() => {
+          renderPDFPreview(cert.data, `preview-${cert.id}`);
+        }, 100);
+      }
+    }
+
+    async function renderPDFPreview(dataUrl, canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+
+      try {
+        const loadingTask = pdfjsLib.getDocument(dataUrl);
+        const pdf = await loadingTask.promise;
+        const page = await pdf.getPage(1);
+        
+        const viewport = page.getViewport({ scale: 1 });
+        const scale = canvas.parentElement.offsetWidth / viewport.width;
+        const scaledViewport = page.getViewport({ scale: scale });
+        
+        canvas.width = scaledViewport.width;
+        canvas.height = scaledViewport.height;
+        
+        const context = canvas.getContext('2d');
+        await page.render({
+          canvasContext: context,
+          viewport: scaledViewport
+        }).promise;
+      } catch (error) {
+        console.error('Error rendering PDF preview:', error);
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.parentElement.offsetWidth;
+        canvas.height = 220;
+        ctx.fillStyle = '#6366f1';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.font = '60px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('📄', canvas.width/2, canvas.height/2);
+      }
+    }
+
+    async function viewCertificate(id) {
+      try {
+        const certificates = await getAllCertificates();
+        const cert = certificates.find(c => c.id == id);
+        if (cert) {
+          const modal = document.getElementById('pdfModal');
+          const viewer = document.getElementById('pdfViewer');
+          viewer.src = cert.data;
+          modal.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error viewing certificate:', error);
+      }
+    }
+
+    async function deleteCertificate(id) {
+      // Store ID for confirmation
+      window.pendingDeleteId = id;
+      
+      // Show custom delete modal
+      document.getElementById('deleteModal').style.display = 'block';
+    }
+
+    function closeDeleteModal() {
+      document.getElementById('deleteModal').style.display = 'none';
+      window.pendingDeleteId = null;
+    }
+
+    async function confirmDelete() {
+      const id = window.pendingDeleteId;
+      if (!id) {
+        console.error('No pending delete ID');
+        return;
+      }
+
+      try {
+        console.log('Starting delete for ID:', id);
+        
+        // Close modal
+        closeDeleteModal();
+        
+        // Show deleting overlay
+        document.getElementById('deletingOverlay').style.display = 'flex';
+        
+        // Fade out the card
+        const card = document.querySelector(`[data-cert-id="${id}"]`);
+        if (card) {
+          card.style.opacity = '0.3';
+          card.style.pointerEvents = 'none';
+        }
+
+        // Wait a bit for visual feedback
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        // Get all certificates first to verify ID exists
+        const allCerts = await getAllCertificates();
+        console.log('All certificates before delete:', allCerts.map(c => ({ id: c.id, name: c.name })));
+        
+        const certToDelete = allCerts.find(c => String(c.id) === String(id));
+        if (!certToDelete) {
+          throw new Error('Certificate not found in database');
+        }
+
+        console.log('Found certificate to delete:', certToDelete.name);
+
+        // Delete from database using the exact ID from the database
+        await deleteCertificateFromDB(certToDelete.id);
+        
+        console.log('Delete successful!');
+        
+        // Hide deleting overlay
+        document.getElementById('deletingOverlay').style.display = 'none';
+        
+        // Show success message
+        showSuccess('🗑️ Certificate "' + certToDelete.name + '" deleted successfully!');
+        
+        // Reload certificates and update stats
+        await loadCertificates();
+        await updateStats();
+        
+      } catch (error) {
+        console.error('Error deleting certificate:', error);
+        
+        // Hide deleting overlay
+        document.getElementById('deletingOverlay').style.display = 'none';
+        
+        // Show detailed error
+        alert('❌ Error deleting certificate: ' + error.message + '\n\nPlease check the browser console for details.');
+        
+        // Restore card if error
+        const card = document.querySelector(`[data-cert-id="${id}"]`);
+        if (card) {
+          card.style.opacity = '1';
+          card.style.pointerEvents = 'auto';
+        }
+      }
+    }
+
+    // Setup delete confirmation button
+    if (!window.deleteListenersAdded) {
+      window.deleteListenersAdded = true;
+      
+      document.addEventListener('DOMContentLoaded', function() {
+        const confirmBtn = document.getElementById('confirmDeleteBtn');
+        if (confirmBtn) {
+          confirmBtn.addEventListener('click', confirmDelete);
+        }
+        
+        // Close modal on outside click
+        const deleteModal = document.getElementById('deleteModal');
+        if (deleteModal) {
+          deleteModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+              closeDeleteModal();
+            }
+          });
+        }
+      });
+    }
+
+    async function updateStats() {
+      try {
+        const certificates = await getAllCertificates();
+        document.getElementById('totalCerts').textContent = certificates.length;
+        
+        const totalSize = certificates.reduce((sum, cert) => sum + (cert.size || 0), 0);
+        const sizeInKB = (totalSize / 1024).toFixed(2);
+        const sizeInMB = (totalSize / (1024 * 1024)).toFixed(2);
+        
+        document.getElementById('storageUsed').textContent = 
+          totalSize > 1024 * 1024 ? `${sizeInMB} MB` : `${sizeInKB} KB`;
+
+        // Update last upload date
+        if (certificates.length > 0) {
+          const sortedCerts = certificates.sort((a, b) => {
+            return new Date(b.uploadDate) - new Date(a.uploadDate);
+          });
+          document.getElementById('lastUpload').textContent = sortedCerts[0].uploadDate;
+        } else {
+          document.getElementById('lastUpload').textContent = '-';
+        }
+      } catch (error) {
+        console.error('Error updating stats:', error);
+      }
+    }
+
+    function showSuccess(message) {
+      const successMsg = document.getElementById('successMessage');
+      successMsg.textContent = message;
+      successMsg.style.display = 'block';
+      setTimeout(() => {
+        successMsg.style.display = 'none';
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
